@@ -8,7 +8,7 @@ import java.util.List;
 
 
 public interface EventService {
-   List<EventResponse> getAllEvent();
+//   List<EventResponse> getAllEvent();
    EventResponse getEventById(Long id);
    EventResponse createEvent(EventRequest request);
    EventResponse updateEvent(Long id, EventRequest request);

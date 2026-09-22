@@ -40,22 +40,22 @@ public class EventServiceImply implements EventService {
     // GET ALL
     // =========================
 
-    @Override
-    public List<EventResponse> getAllEvent() {
-
-        // Lấy tất cả Event
-        List<Event> events = eventRepository.findAll();
-
-        // Tạo list kết quả
-        List<EventResponse> responses = new ArrayList<>();
-
-        // Event → EventResponse
-        for (Event event : events) {
-            responses.add(eventMapper.toResponse(event));
-        }
-
-        return responses;
-    }
+//    @Override
+//    public List<EventResponse> getAllEvent() {
+//
+//        // Lấy tất cả Event
+//        List<Event> events = eventRepository.findAll();
+//
+//        // Tạo list kết quả
+//        List<EventResponse> responses = new ArrayList<>();
+//
+//        // Event → EventResponse
+//        for (Event event : events) {
+//            responses.add(eventMapper.toResponse(event));
+//        }
+//
+//        return responses;
+//    }
 
 
     // =========================

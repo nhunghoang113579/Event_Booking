@@ -60,18 +60,18 @@ public ResponseEntity<Void>deleteEvent(@PathVariable Long id){
 
 //GetAll
 
-    @GetMapping("/all")
-
-    public  ResponseEntity<List<EventResponse>>getAllEvent(
-            @RequestParam(required = false)String type,
-            @RequestParam(required = false)String search,
-            @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size
-    ){
-        List<EventResponse> allEvent = eventService.getAllEvent();
-        return ResponseEntity.status(HttpStatus.OK).body(allEvent);
-
-    }
+//    @GetMapping("/all")
+//
+//    public  ResponseEntity<List<EventResponse>>getAllEvent(
+//            @RequestParam(required = false)String type,
+//            @RequestParam(required = false)String search,
+//            @RequestParam(defaultValue = "1") Integer page,
+//            @RequestParam(defaultValue = "10") Integer size
+//    ){
+//        List<EventResponse> allEvent = eventService.getAllEvent();
+//        return ResponseEntity.status(HttpStatus.OK).body(allEvent);
+//
+//    }
 
 //e. Chi tiết sự kiện getById
     @GetMapping("/{id}")
@@ -93,7 +93,7 @@ public ResponseEntity<Void>deleteEvent(@PathVariable Long id){
 
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getEvents(
+    public ResponseEntity<ApiResponse<List<EventResponse>>> getEvents(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Double userLat,
@@ -112,14 +112,13 @@ public ResponseEntity<Void>deleteEvent(@PathVariable Long id){
                         size
                 );
 
-        Map<String, Object> response = new HashMap<>();
+        ApiResponse<List<EventResponse>> response =
+                new ApiResponse<>(
+                        true,
+                        "Events fetched successfully",
+                        events
+                );
 
-        response.put("success", true);
-        response.put(
-                "message",
-                "Events retrieved successfully"
-        );
-        response.put("data", events);
 
         return ResponseEntity.ok(response);
     }
