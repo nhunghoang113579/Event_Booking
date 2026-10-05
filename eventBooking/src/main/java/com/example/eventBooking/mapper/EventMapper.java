@@ -1,14 +1,9 @@
 package com.example.eventBooking.mapper;
 
-import com.example.eventBooking.dto.EventResponse;
+import com.example.eventBooking.dto.response.EventResponse;
 import com.example.eventBooking.entity.Event;
-import com.example.eventBooking.dto.EventRequest;
-import jakarta.validation.constraints.*;
-import org.hibernate.validator.constraints.URL;
+import com.example.eventBooking.dto.request.EventRequest;
 import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 
 @Component

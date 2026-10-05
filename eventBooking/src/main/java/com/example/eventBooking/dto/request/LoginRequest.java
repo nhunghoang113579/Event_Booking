@@ -1,4 +1,4 @@
-package com.example.eventBooking.dto;
+package com.example.eventBooking.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

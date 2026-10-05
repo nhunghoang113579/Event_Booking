@@ -1,8 +1,8 @@
 package com.example.eventBooking.controller;
 
-import com.example.eventBooking.dto.ApiResponse;
-import com.example.eventBooking.dto.BookingRequest;
-import com.example.eventBooking.dto.BookingResponse;
+import com.example.eventBooking.dto.response.ApiResponse;
+import com.example.eventBooking.dto.request.BookingRequest;
+import com.example.eventBooking.dto.response.BookingResponse;
 import com.example.eventBooking.service.BookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

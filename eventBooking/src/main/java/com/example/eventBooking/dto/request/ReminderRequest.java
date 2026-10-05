@@ -1,5 +1,6 @@
-package com.example.eventBooking.dto;
+package com.example.eventBooking.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReminderResponse {
+public class ReminderRequest {
 
+    @NotNull(message = "Event reminder must be true or false")
     private Boolean eventReminder;
 }

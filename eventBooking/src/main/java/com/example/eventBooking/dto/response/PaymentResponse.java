@@ -1,4 +1,4 @@
-package com.example.eventBooking.dto;
+package com.example.eventBooking.dto.response;
 
 import com.example.eventBooking.entity.PaymentStatus;
 import lombok.AllArgsConstructor;

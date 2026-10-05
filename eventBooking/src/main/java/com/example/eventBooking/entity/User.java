@@ -1,10 +1,7 @@
 package com.example.eventBooking.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,8 +9,9 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -47,4 +45,6 @@ public class User {
     // User 1 --- 1 Reminder
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Reminder reminder;
+
+
 }

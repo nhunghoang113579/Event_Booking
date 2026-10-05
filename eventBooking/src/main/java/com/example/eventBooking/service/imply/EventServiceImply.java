@@ -1,9 +1,10 @@
 package com.example.eventBooking.service.imply;
 
-import com.example.eventBooking.dto.EventRequest;
-import com.example.eventBooking.dto.EventResponse;
+import com.example.eventBooking.dto.request.EventRequest;
+import com.example.eventBooking.dto.response.ErrorResponse;
+import com.example.eventBooking.dto.response.EventResponse;
+import com.example.eventBooking.dto.response.FieldError;
 import com.example.eventBooking.entity.Event;
-import com.example.eventBooking.exception.FieldErrorResponse;
 import com.example.eventBooking.exception.ResourceNotFoundException;
 import com.example.eventBooking.mapper.EventMapper;
 import com.example.eventBooking.repository.EventRepository;
@@ -13,17 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import com.example.eventBooking.exception.FieldErrorResponse;
 import com.example.eventBooking.exception.ValidationException;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,32 +27,6 @@ public class EventServiceImply implements EventService {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
 
-
-    // =========================
-    // GET ALL
-    // =========================
-
-//    @Override
-//    public List<EventResponse> getAllEvent() {
-//
-//        // Lấy tất cả Event
-//        List<Event> events = eventRepository.findAll();
-//
-//        // Tạo list kết quả
-//        List<EventResponse> responses = new ArrayList<>();
-//
-//        // Event → EventResponse
-//        for (Event event : events) {
-//            responses.add(eventMapper.toResponse(event));
-//        }
-//
-//        return responses;
-//    }
-
-
-    // =========================
-    // GET BY ID
-    // =========================
 
     @Override
     public EventResponse getEventById(Long id) {
@@ -161,7 +127,7 @@ public class EventServiceImply implements EventService {
     ) {
 
         // 1. Tạo danh sách chứa lỗi
-        List<FieldErrorResponse> errors = new ArrayList<>();
+        List<FieldError> errors = new ArrayList<>();
 
         // 2. Kiểm tra type
         if (type != null &&
@@ -170,7 +136,7 @@ public class EventServiceImply implements EventService {
                 !type.equals("nearby")) {
 
             errors.add(
-                    new FieldErrorResponse(
+                    new FieldError(
                             "type",
                             "Invalid type value"
                     )
@@ -180,7 +146,7 @@ public class EventServiceImply implements EventService {
         // 3. Kiểm tra page
         if (page < 1) {
             errors.add(
-                    new FieldErrorResponse(
+                    new FieldError(
                             "page",
                             "Page must be a positive integer"
                     )
@@ -190,7 +156,7 @@ public class EventServiceImply implements EventService {
         // 4. Kiểm tra size
         if (size < 1) {
             errors.add(
-                    new FieldErrorResponse(
+                    new FieldError(
                             "size",
                             "Size must be a positive integer"
                     )
@@ -233,12 +199,12 @@ public class EventServiceImply implements EventService {
 
             if (userLat == null || userLng == null) {
 
-                List<FieldErrorResponse> locationErrors =
+                List<FieldError> locationErrors =
                         new ArrayList<>();
 
                 if (userLat == null) {
                     locationErrors.add(
-                            new FieldErrorResponse(
+                            new FieldError(
                                     "userLat",
                                     "User latitude is required"
                             )
@@ -247,7 +213,7 @@ public class EventServiceImply implements EventService {
 
                 if (userLng == null) {
                     locationErrors.add(
-                            new FieldErrorResponse(
+                            new FieldError(
                                     "userLng",
                                     "User longitude is required"
                             )

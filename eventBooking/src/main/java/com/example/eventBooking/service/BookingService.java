@@ -1,7 +1,7 @@
 package com.example.eventBooking.service;
 
-import com.example.eventBooking.dto.BookingResponse;
-import com.example.eventBooking.dto.BookingRequest;
+import com.example.eventBooking.dto.response.BookingResponse;
+import com.example.eventBooking.dto.request.BookingRequest;
 
 import java.util.List;
 

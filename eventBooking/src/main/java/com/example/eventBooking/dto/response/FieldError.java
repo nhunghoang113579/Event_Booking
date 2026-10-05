@@ -1,13 +1,13 @@
-package com.example.eventBooking.exception;
+package com.example.eventBooking.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 @AllArgsConstructor
-public class FieldErrorResponse {
+public class FieldError {
+
     private String field;
+
     private String message;
 }

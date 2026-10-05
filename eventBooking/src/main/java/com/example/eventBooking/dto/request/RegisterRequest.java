@@ -1,4 +1,4 @@
-package com.example.eventBooking.dto;
+package com.example.eventBooking.dto.request;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -16,15 +16,16 @@ public class RegisterRequest {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
+    @Pattern(
+            regexp = "^[A-Za-z0-9._%+-]+@gmail\\.com$",
+            message = "Email must be a Gmail address"
+    )
     private String email;
 
+
     @NotBlank(message = "Password is required")
-    @Size(
-            min = 8,
-            message = "Password must be at least 8 characters and contain letters and numbers"
-    )
     @Pattern(
-            regexp = "^(?=.*[A-Za-z])(?=.*\\d).+$",
+            regexp = "^(?=.*[A-Za-z])(?=.*\\d).{8,}$",
             message = "Password must be at least 8 characters and contain letters and numbers"
     )
     private String password;

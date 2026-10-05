@@ -1,5 +1,8 @@
 package com.example.eventBooking.exception;
 
+import com.example.eventBooking.dto.response.ApiResponse;
+import com.example.eventBooking.dto.response.ErrorResponse;
+import com.example.eventBooking.dto.response.FieldError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,32 +15,23 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Lỗi @Valid trong Request DTO
+    // Lỗi @Valid trong Request DTO   // Lỗi page, size, type
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationErrorResponse> handleValidation(
+    public ResponseEntity<ErrorResponse> handleValidation(
             MethodArgumentNotValidException ex) {
 
-        List<FieldErrorResponse> errors = new ArrayList<>();
+        List<FieldError> errors = ex.getBindingResult().getFieldErrors()
+                .stream()
+                .map(error -> new FieldError(
+                        error.getField(),
+                        error.getDefaultMessage()))
+                .toList();
 
-        ex.getBindingResult()
-                .getFieldErrors()
-                .forEach(error -> {
-
-                    errors.add(
-                            new FieldErrorResponse(
-                                    error.getField(),
-                                    error.getDefaultMessage()
-                            )
-                    );
-
-                });
-
-        ValidationErrorResponse response =
-                new ValidationErrorResponse(
-                        false,
-                        "Validation failed",
-                        errors
-                );
+        ErrorResponse response = ErrorResponse.builder()
+                .success(false)
+                .message("Validation failed")
+                .errors(errors)
+                .build();
 
         return ResponseEntity
                 .status(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -45,37 +39,53 @@ public class GlobalExceptionHandler {
     }
 
 
-    // Lỗi Resource không tồn tại
+//
+//
+//    //Lỗi Resource không tồn tại
+
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFound(
-            ResourceNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
 
-        ErrorResponse response =
-                new ErrorResponse(
-                        false,
-                        ex.getMessage()
-                );
+        ErrorResponse response = ErrorResponse.builder()
+                .success(false)
+                .message(ex.getMessage())
+                .build();
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
 
-    // Lỗi page, size, type
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(
+            BusinessException ex) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .success(false)
+                .message(ex.getMessage())
+                .build();
+
+        return ResponseEntity
+                .status(ex.getStatus())
+                .body(response);
+    }
+
+    // Custom ValidationException
+    // page / size / type / nearby
+    // ==========================================
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ValidationErrorResponse> handleCustomValidation(
+    public ResponseEntity<ErrorResponse> handleValidationException(
             ValidationException ex) {
 
-        ValidationErrorResponse response =
-                new ValidationErrorResponse(
-                        false,
-                        "Validation failed",
-                        ex.getErrors()
-                );
+        ErrorResponse response = ErrorResponse.builder()
+                .success(false)
+                .message(ex.getMessage())
+                .errors(ex.getErrors())
+                .build();
 
         return ResponseEntity
-                .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .status(ex.getStatus())
                 .body(response);
     }
-}
+    }
+
+

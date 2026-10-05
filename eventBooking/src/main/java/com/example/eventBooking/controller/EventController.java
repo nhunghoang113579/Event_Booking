@@ -1,20 +1,16 @@
 package com.example.eventBooking.controller;
 
-import com.example.eventBooking.dto.ApiResponse;
-import com.example.eventBooking.dto.EventRequest;
-import com.example.eventBooking.dto.EventResponse;
-import com.example.eventBooking.entity.Event;
+import com.example.eventBooking.dto.response.ApiResponse;
+import com.example.eventBooking.dto.request.EventRequest;
+import com.example.eventBooking.dto.response.EventResponse;
 import com.example.eventBooking.service.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController

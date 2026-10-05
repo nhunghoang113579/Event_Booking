@@ -1,7 +1,7 @@
 package com.example.eventBooking.service.imply;
 
-import com.example.eventBooking.dto.BookingRequest;
-import com.example.eventBooking.dto.BookingResponse;
+import com.example.eventBooking.dto.request.BookingRequest;
+import com.example.eventBooking.dto.response.BookingResponse;
 import com.example.eventBooking.entity.Booking;
 import com.example.eventBooking.entity.Event;
 import com.example.eventBooking.entity.User;
@@ -12,6 +12,8 @@ import com.example.eventBooking.repository.EventRepository;
 import com.example.eventBooking.repository.UserRepository;
 import com.example.eventBooking.service.BookingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -37,14 +39,19 @@ public class BookingServiceImply implements BookingService {
                         new ResourceNotFoundException("Event not found")
                 );
 
-        // 2. Tạm lấy User có id = 1
-        User user = userRepository.findById(1L)
+        // 2. Lấy user đang đăng nhập từ JWT
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found")
                 );
 
-        // 3. Request → Booking
-        Booking booking = bookingMapper.bookingtoEntity(request);
+        // 3. Request -> Booking
+        Booking booking = bookingMapper.bookingToEntity(request);
 
         // 4. Gán User
         booking.setUser(user);
@@ -65,8 +72,8 @@ public class BookingServiceImply implements BookingService {
         // 8. Lưu Database
         Booking saveBooking = bookingRepository.save(booking);
 
-        // 9. Booking → Response
-        return bookingMapper.toRespone(saveBooking);
+        // 9. Booking -> Response
+        return bookingMapper.toResponse(saveBooking);
     }
 
     @Override
@@ -77,7 +84,7 @@ public class BookingServiceImply implements BookingService {
         List<BookingResponse> responses = new ArrayList<>();
 
         for (Booking booking : bookings) {
-            responses.add(bookingMapper.toRespone(booking));
+            responses.add(bookingMapper.toResponse(booking));
         }
 
         return responses;
@@ -87,9 +94,4 @@ public class BookingServiceImply implements BookingService {
     public long countByEventId(Long eventId) {
         return bookingRepository.countByEventId(eventId);
     }
-
-
-
-
-
 }
