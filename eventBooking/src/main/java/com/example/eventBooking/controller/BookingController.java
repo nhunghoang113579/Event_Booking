@@ -2,7 +2,9 @@ package com.example.eventBooking.controller;
 
 import com.example.eventBooking.dto.response.ApiResponse;
 import com.example.eventBooking.dto.request.BookingRequest;
+import com.example.eventBooking.dto.response.BookingDetailResponse;
 import com.example.eventBooking.dto.response.BookingResponse;
+import com.example.eventBooking.entity.Booking;
 import com.example.eventBooking.service.BookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,19 +29,16 @@ public class BookingController {
 
         BookingResponse booking = bookingService.create(request);
 
-        ApiResponse<BookingResponse>response = new ApiResponse<>(
-                true,
-                "Booking successful",
-                booking
 
-        );
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(response);
+                .body(new ApiResponse<>(
+                        true,
+                        "Booking successful",
+                        booking));
     }
 
-    @GetMapping
     public ResponseEntity<List<BookingResponse>> getAll() {
 
         List<BookingResponse> responses = bookingService.getAll();
@@ -49,16 +48,11 @@ public class BookingController {
                 .body(responses);
     }
 
-    @GetMapping("/{eventId}/count")
-    public ResponseEntity<Map<String, Object>> getBookingCount(
-            @PathVariable Long eventId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<BookingDetailResponse>getBooking(
+            @PathVariable Long id) {
 
-        long count = bookingService.countByEventId(eventId);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("message", "Booking count retrieved successfully");
-        response.put("data", count);
+        BookingDetailResponse response = bookingService.getById(id);
 
         return ResponseEntity.ok(response);
     }

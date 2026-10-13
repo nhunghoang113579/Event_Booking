@@ -70,18 +70,21 @@ public class SecurityConfig {
                         // =========================
                         .requestMatchers(
                                 HttpMethod.POST,
+                                "/api/v1/events",
                                 "/api/v1/events/**"
                         )
                         .hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.PUT,
+                                "/api/v1/events",
                                 "/api/v1/events/**"
                         )
                         .hasRole("ADMIN")
 
                         .requestMatchers(
                                 HttpMethod.DELETE,
+                                "/api/v1/events",
                                 "/api/v1/events/**"
                         )
                         .hasRole("ADMIN")

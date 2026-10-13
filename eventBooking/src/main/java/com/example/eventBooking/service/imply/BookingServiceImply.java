@@ -1,11 +1,15 @@
 package com.example.eventBooking.service.imply;
 
 import com.example.eventBooking.dto.request.BookingRequest;
+import com.example.eventBooking.dto.response.BookingDetailResponse;
 import com.example.eventBooking.dto.response.BookingResponse;
+import com.example.eventBooking.dto.response.FieldError;
 import com.example.eventBooking.entity.Booking;
+import com.example.eventBooking.entity.BookingStatus;
 import com.example.eventBooking.entity.Event;
 import com.example.eventBooking.entity.User;
 import com.example.eventBooking.exception.ResourceNotFoundException;
+import com.example.eventBooking.exception.ValidationException;
 import com.example.eventBooking.mapper.BookingMapper;
 import com.example.eventBooking.repository.BookingRepository;
 import com.example.eventBooking.repository.EventRepository;
@@ -32,6 +36,12 @@ public class BookingServiceImply implements BookingService {
 
     @Override
     public BookingResponse create(BookingRequest request) {
+        List<FieldError> errors = new ArrayList<>();
+
+
+        if (!errors.isEmpty()) {
+            throw new ValidationException(errors);
+        }
 
         // 1. Tìm Event
         Event event = eventRepository.findById(request.getEventId())
@@ -53,6 +63,7 @@ public class BookingServiceImply implements BookingService {
         // 3. Request -> Booking
         Booking booking = bookingMapper.bookingToEntity(request);
 
+
         // 4. Gán User
         booking.setUser(user);
 
@@ -68,6 +79,7 @@ public class BookingServiceImply implements BookingService {
 
         // 7. Thời gian tạo
         booking.setCreatedAt(LocalDateTime.now());
+        booking.setStatus(BookingStatus.PENDING);
 
         // 8. Lưu Database
         Booking saveBooking = bookingRepository.save(booking);
@@ -90,8 +102,23 @@ public class BookingServiceImply implements BookingService {
         return responses;
     }
 
+
+
     @Override
-    public long countByEventId(Long eventId) {
-        return bookingRepository.countByEventId(eventId);
+    public BookingDetailResponse getById(Long id) {
+
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Booking not found with id: " + id
+                        )
+                );
+
+        return bookingMapper.toDetailResponse(booking);
     }
+
+
+
+
+
 }
